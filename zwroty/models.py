@@ -11,12 +11,13 @@ class Shop(models.Model):
 
 
 class SkuInformation(models.Model):
-    sku = models.IntegerField()
+    sku_log = models.IntegerField()
+    sku_hand = models.IntegerField(default=0)
     name_of_product = models.CharField(max_length=100)
     barcodes = models.ManyToManyField("Barcode")
 
     def __str__(self):
-        return f"{self.sku} {self.name_of_product}"
+        return f"{self.sku_log} {self.name_of_product}"
 
 
 class Barcode(models.Model):
