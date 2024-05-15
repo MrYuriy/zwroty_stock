@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+
+
+{% if request.user.is_authenticated %}
+    <form action="{% url 'logout' %}" method="post" class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
+      {% csrf_token %}
+      <button type="submit" 
+      class="btn  d-flex align-items-center justify-content-center"
+      style="font-size: 30px; padding: 10px;">Logout</button>
+    </form>
+ 
+{% else %}
+<form action="{% url 'login' %}" method="post" class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
+    {% csrf_token %}
+    <button type="submit" 
+    class="btn  d-flex align-items-center justify-content-center"
+    style="font-size: 30px; padding: 10px;">Login</button>
+  </form>
+{% endif %}
+
+{% endblock %}
