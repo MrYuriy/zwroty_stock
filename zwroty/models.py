@@ -28,8 +28,22 @@ class Barcode(models.Model):
 
 
 class Product(models.Model):
+    PALLET = "P"
+    BOX = "C"
+    
+    TAPE_OF_DELIVERY_CHOICES = [
+        (PALLET, "Pallet"),
+        (BOX, "Box"),
+    ]
     sku = models.ForeignKey("SkuInformation", on_delete=models.CASCADE, null=True)
     quantity = models.IntegerField()
+
+    tape_of_delivery = models.CharField(
+        max_length=1,
+        choices=TAPE_OF_DELIVERY_CHOICES,
+        default=BOX,
+        verbose_name="tape_of_delivery",
+    )
 
     def __str__(self) -> str:
         return self.sku.name_of_product
@@ -43,11 +57,13 @@ class ReasoneComment(models.Model):
 
 
 class ReturnOrder(models.Model):
+
     nr_order = models.CharField(max_length=20)
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
     reasone = models.ForeignKey(ReasoneComment, on_delete=models.CASCADE)
     products = models.ForeignKey(
         Product, on_delete=models.CASCADE, null=True, blank=True)
+    
 
     def __str__(self) -> str:
         return f"{self.nr_order} - {self.shop}"
