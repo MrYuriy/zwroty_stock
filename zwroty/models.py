@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 
@@ -27,6 +28,15 @@ class Barcode(models.Model):
         return self.barcode
 
 
+
+class ReasoneComment(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self) -> str:
+        return self.name
+
+
+
 class Product(models.Model):
     PALLET = "P"
     BOX = "C"
@@ -44,27 +54,25 @@ class Product(models.Model):
         default=BOX,
         verbose_name="tape_of_delivery",
     )
+    reasone = models.ForeignKey(ReasoneComment, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return self.sku.name_of_product
 
 
-class ReasoneComment(models.Model):
-    name = models.CharField(max_length=100)
-
-    def __str__(self) -> str:
-        return self.name
-
-
 class ReturnOrder(models.Model):
-
     nr_order = models.CharField(max_length=20)
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
-    reasone = models.ForeignKey(ReasoneComment, on_delete=models.CASCADE)
     products = models.ForeignKey(
         Product, on_delete=models.CASCADE, null=True, blank=True)
     
-
+    identifier = models.BigIntegerField(unique=True)
+    date_recive = models.DateTimeField()
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    comment = models.TextField()
+    transaction = models.TextField(blank=True)
+    complite_status = models.BooleanField(default=False)
+    
     def __str__(self) -> str:
         return f"{self.nr_order} - {self.shop}"
     
