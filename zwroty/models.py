@@ -62,12 +62,13 @@ class Product(models.Model):
 
 class ReturnOrder(models.Model):
     nr_order = models.CharField(max_length=20)
+    position_nr = models.IntegerField()
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
     products = models.ForeignKey(
         Product, on_delete=models.CASCADE, null=True, blank=True)
     
     identifier = models.BigIntegerField(unique=True)
-    date_recive = models.DateTimeField()
+    date_recive = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     comment = models.TextField()
     transaction = models.TextField(blank=True)

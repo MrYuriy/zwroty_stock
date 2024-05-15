@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+
+{% block navigation %}
+    <nav class="navigation">
+        {% comment %} <a class="btn btn-secondary" role="button" href="{% url 'delivery:home' %}">Do głównej</a>
+        <a class="btn btn-outline-secondary" role="button" href="{% url 'delivery:select_receprion' %}">Wróć</a>
+         {% endcomment %}
+    </nav>
+{% endblock %}
+
+{% block content %}
+<form method="post" action="{% url 'zwroty:create_return_order' %}" enctype="multipart/home">
+    {% csrf_token %}
+
+        <select id="tape_of_delivery" name="tape_of_order" class="form-select">
+            <option  disabled selected value="" >Sposób dostawy</option>
+            <option value="value1">value1</option>
+            <option value="value2">value2</option>
+        </select> <br>
+
+        <div class="input-group mb-3" type="text">
+            <span class="input-group-text" id="inputGroup-sizing-default">Nr zamówienia:</span>
+            <input id="order_number" name="order_number" type="text" class="form-control "><br>
+        </div>
+
+        <div class="input-group mb-3" type="text">
+            <span class="input-group-text" id="inputGroup-sizing-default">QTY:</span>
+            <input id="qty" name="qty" type="number" class="form-control "><br>
+        </div>
+
+
+        <select id="tape_of_delivery" name="tape_of_order" class="form-select">
+            <option  disabled selected value="" >Sposób dostawy</option>
+            <option value="C">Paczka</option>
+            <option value="P">Paleta</option>
+        </select> <br>
+        
+        <input class="btn btn-secondary" type="submit" value="Submit" style="width: 100%;"> 
+    
+</form>
+
+{% if error_message %}
+    <div class="alert alert-danger" role="alert">
+        {{ error_message }}
+    </div>
+{% endif %}
+    
+{% endblock %}
