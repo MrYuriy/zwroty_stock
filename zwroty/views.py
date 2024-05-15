@@ -1,8 +1,11 @@
+import os
+from django.conf import settings
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
-from .models import Product, ReturnOrder, Shop
-
+from .models import Product, ReturnOrder, Shop, ReasoneComment
+from django.core.cache import cache, caches
+from django.core.cache.backends.filebased import FileBasedCache
 
 
 class HomeView(View):
