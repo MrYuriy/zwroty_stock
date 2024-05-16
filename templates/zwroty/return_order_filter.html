@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block navigation %}
+    <nav class="navigation">
+        <a class="btn btn-secondary" role="button" href="{% url 'zwroty:home' %}">Do głównej</a>
+   
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <form method="post" action="{% url 'zwroty:order_filter_page' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="input-group mb-3" type="number">
+            <input type="number" name="identifier" style="width: 100%;" placeholder="Identyfikator">
+        </div>
+
+        <div class="input-group mb-3" type="number">
+            <input type="text" name="nr_order" style="width: 100%;" placeholder="Bon wyjścia">
+        </div>
+
+        <div class="input-group mb-3" type="number">
+            <input type="number" name="position_nr" style="width: 100%;" placeholder="Numer wuzetki">
+        </div>
+
+        <div class="input-group mb-3">
+            <select name="staus" class="form-select">
+                <option  disabled selected value="" >Status</option>
+                <option value="1">Zrobione </option>
+                <option value="0">Nie zrobione </option>
+            </select>
+        </div>
+
+        <div class="input-group mb-3" type="number">
+            <span class="input-group-text" id="inputGroup-sizing-default">Data: </span>
+            <input type="date" name="date_recive" class="form-control" aria-describedby="inputGroup-sizing-default">
+        </div>
+
+        <input class="btn btn-secondary" type="submit" value="Submit" style="width: 100%;"> 
+    </form>
+    </form>
+{% endblock %}

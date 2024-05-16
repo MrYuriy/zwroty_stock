@@ -82,7 +82,6 @@ class AddProduct(View):
     def get(self, request, *args, **kwargs):
         identifier = self.request.GET.get("identifier")
         context = self.get_context_data()
-        print("GET identifier:", identifier)
         context["identifier"] = identifier
         return render(request, self.template_name, context)
 
@@ -99,7 +98,6 @@ class AddProduct(View):
         if finish:
             reas_queryset = ReasoneComment.objects.all()
             order = ReturnOrder.objects.get(identifier=identifier)
-            print(order)
             product_list = Product.objects.bulk_create([
                 Product(
                     sku = line["sku"],
@@ -146,8 +144,6 @@ class ReportWZView(View):
         order_list = ReturnOrder.objects.filter(
             complite_status=False, date_recive__date=rec_day
             )
-            
-
         buffer = io.BytesIO()
         my_canvas = canvas.Canvas(buffer)
         
@@ -166,3 +162,41 @@ class ReportWZView(View):
         buffer.seek(0)
         response = FileResponse(buffer, as_attachment=False, filename="Protokół szkody.pdf")
         return response
+    
+class OrderStorageView(View):
+    template_name = "zwroty/return_order_filter.html"
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+    
+    def post(self, request, *args, **kwargs):
+
+        identifier = request.POST.get("identifier", None)
+        nr_order = request.POST.get("nr_order", None)
+        position_nr = request.POST.get("position_nr", None)
+        status = request.POST.get("staus", None)
+        date_recive = request.POST.get("date_recive", None)
+
+        queryset = ReturnOrder.objects.all().select_related("shop", "user").prefetch_related("products")
+
+        if identifier:
+            queryset = queryset.filter(identifier=identifier)
+        if position_nr:
+            queryset = queryset.filter(identifier=position_nr)
+        if nr_order:
+            queryset = queryset.filter(nr_order=nr_order)
+        if status:
+            status = int(status)
+            queryset = queryset.filter(complite_status=status)
+        if date_recive:
+            date_recive = datetime.strptime(date_recive, "%Y-%m-%d")
+            queryset = queryset.filter(date_recive__date=date_recive)
+        
+        context = {"order_list": queryset.order_by("-date_recive")}
+        return render(request, "zwroty/return_order_list.html", context)
+
+class ReturnOrderListView(View):
+    template_name = "zwroty/return_order_list.html"
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)

@@ -1,0 +1,48 @@
+{% extends 'pc_base.html' %}
+{% load crispy_forms_filters %}
+
+{% block navigation %}
+    <nav class="navigation">
+        <a class="btn btn-secondary" style="margin-left: 30px;" role="button" href="{% url 'zwroty:home' %}">Do głównej</a> 
+    </nav>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="width: 90%;">
+    <div class="row justify-content-center">
+        <div class="col-lg-12">
+            
+                <table class="table table-sm">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Id</th>
+                            <th>Data Przyjęcia</th>
+                            <th>Bon wyjścia</th>
+                            <th>Numer wuzetki</th>  
+                            <th>Sklep</th>
+                            <th>Status</th>
+                        </tr> 
+                        <tbody>
+                            {% for order in order_list %}
+                            <tr>
+                                <td>{{ order.identifier }}</td>  
+                                <td>{{ order.date_recive|date:"d-m-Y" }}</td> 
+                                <td>{{ order.nr_order }}</td>  
+                                <td>{{ order.position_nr }}</td>  
+                                <td>{{ order.shop.description }}</td>  
+                                <td>
+                                    {% if order.complite_status %}
+                                        Zrobione
+                                    {% else %}
+                                        Nie Zrobione
+                                    {% endif %}
+                                </td>  
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
