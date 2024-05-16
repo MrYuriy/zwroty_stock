@@ -25,7 +25,11 @@
                         <tbody>
                             {% for order in order_list %}
                             <tr>
-                                <td>{{ order.identifier }}</td>  
+                                <td><a style="text-decoration:none" 
+                                    class="link-dark " 
+                                    href="{% url 'zwroty:return_order_detail' pk=order.id %}">
+                                    {{ order.identifier }}
+                                </a></td>
                                 <td>{{ order.date_recive|date:"d-m-Y" }}</td> 
                                 <td>{{ order.nr_order }}</td>  
                                 <td>{{ order.position_nr }}</td>  

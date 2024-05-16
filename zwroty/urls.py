@@ -4,7 +4,8 @@ from .views import (
     HomeView, AddProduct, 
     AddLineMenuView, 
     ReportWZView,
-    OrderStorageView
+    OrderStorageView,
+    ReturnOrderDetailView
     )
 
 urlpatterns = [
@@ -16,6 +17,7 @@ urlpatterns = [
     path("add-product", AddProduct.as_view(), name="add_product"),
     path("report-wz", ReportWZView.as_view(), name="report_wz"),
     path("order-storage", OrderStorageView.as_view(), name="order_filter_page"),
+    path("return-order/<int:pk>/detail/", ReturnOrderDetailView.as_view(), name="return_order_detail"),
 ]
 
 app_name = "zwroty"

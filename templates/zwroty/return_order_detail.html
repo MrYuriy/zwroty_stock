@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% load static %}
+{% block navigation %}
+    <a class="btn btn-secondary"  role="button" href="{% url 'zwroty:home' %}">Do głównej</a>
+    
+    <a class="btn btn-outline-secondary" role="button" href="{% url 'zwroty:order_filter_page' %}" title="Wróć">Wróć</a> 
+{% endblock %}
+
+{% block content %}
+
+    <div>
+        {% csrf_token %}
+        <p class="alert alert-dark">Id: {{ order.identifier }}</p>
+        <p class="alert alert-dark">Bon wyjścia:: {{ order.nr_order }}</p>
+        <p class="alert alert-dark">Numer wuzetki: {{ order.position_nr }}</p>
+        <p class="alert alert-dark">Sklep: {{ order.shop.description }}</p>
+        <p class="alert alert-dark">Status: 
+            {% if order.complite_status %}
+                Zrobione
+            {% else %}
+                Nie Zrobione
+            {% endif %}
+        </p>
+        {% for sku in order_products %}
+        <p class="alert alert-dark">
+            
+                {{ sku | linebreaksbr }}
+           
+        </p>
+        {% endfor %}
+
+    </div>
+{% endblock %}

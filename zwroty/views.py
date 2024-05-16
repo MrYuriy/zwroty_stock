@@ -3,11 +3,11 @@ import io
 import os
 from django.conf import settings
 from django.http import FileResponse, HttpResponseRedirect
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.views import View
-from datetime import datetime, timedelta
+from datetime import datetime
 from .models import Product, ReturnOrder, Shop, ReasoneComment, SkuInformation
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
@@ -15,7 +15,7 @@ from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.graphics.barcode import code128
-import emoji
+
 
 
 class HomeView(View):
@@ -112,6 +112,7 @@ class AddProduct(View):
             order.complite_status = True
             order.save()
             cached_value = cache.get(identifier)
+            cache.delete(identifier)
             return redirect("zwroty:home")
         sku = SkuInformation.objects.filter(barcodes__barcode = ean).first()
 
@@ -156,7 +157,7 @@ class ReportWZView(View):
             my_canvas.drawString(100, 654, f"Bon wyjścia: {order.nr_order}")
             my_canvas.drawString(100, 634, f"Numer wuzetki: {order.position_nr}")
             my_canvas.drawString(100, 614, f"Sklep: {order.shop.description}")
-            my_canvas.drawString(300, 570, f"<-- Zeskanuj to ({order.identifier})")
+            my_canvas.drawString(300, 570, f"<-- Zeskanuj ({order.identifier})")
             my_canvas.showPage()
         my_canvas.save()
         buffer.seek(0)
@@ -180,11 +181,11 @@ class OrderStorageView(View):
         queryset = ReturnOrder.objects.all().select_related("shop", "user").prefetch_related("products")
 
         if identifier:
-            queryset = queryset.filter(identifier=identifier)
+            queryset = queryset.filter(identifier__icontains=identifier)
         if position_nr:
-            queryset = queryset.filter(identifier=position_nr)
+            queryset = queryset.filter(identifier__icontains=position_nr)
         if nr_order:
-            queryset = queryset.filter(nr_order=nr_order)
+            queryset = queryset.filter(nr_order__icontains=nr_order)
         if status:
             status = int(status)
             queryset = queryset.filter(complite_status=status)
@@ -194,6 +195,27 @@ class OrderStorageView(View):
         
         context = {"order_list": queryset.order_by("-date_recive")}
         return render(request, "zwroty/return_order_list.html", context)
+
+
+class ReturnOrderDetailView(View):
+    def get_context_data(self, oredr_id):
+        context = {}
+        order = get_object_or_404(ReturnOrder, id=oredr_id)
+        date_recive = order.date_recive.strftime("%d.%m.%Y")
+        context["date_recive"] = date_recive
+        context["order"] = order
+        context["order_products"] = [
+            f"sku_log: {product.sku.sku_log}\n\
+                sku_hand: {product.sku.sku_hand}\n\
+                    sku_ean: {product.sku.barcodes.all().first()}\n" \
+                for product in order.products.all()]
+        return context
+
+    def get(self, request, *args, **kwargs):
+        order_id = self.kwargs.get("pk")
+        context = self.get_context_data(oredr_id=order_id)
+        return render(request, "zwroty/return_order_detail.html", context)
+
 
 class ReturnOrderListView(View):
     template_name = "zwroty/return_order_list.html"
