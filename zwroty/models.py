@@ -4,7 +4,7 @@ from django.db import models
 
 class Shop(models.Model):
     shop_nr = models.IntegerField()
-    description  = models.CharField(max_length=100)
+    description = models.CharField(max_length=100)
     ship_doc = models.CharField(max_length=4)
 
     def __str__(self) -> str:
@@ -28,7 +28,6 @@ class Barcode(models.Model):
         return self.barcode
 
 
-
 class ReasoneComment(models.Model):
     name = models.CharField(max_length=100)
 
@@ -36,11 +35,10 @@ class ReasoneComment(models.Model):
         return self.name
 
 
-
 class Product(models.Model):
     PALLET = "P"
     BOX = "C"
-    
+
     TAPE_OF_DELIVERY_CHOICES = [
         (PALLET, "Pallet"),
         (BOX, "Box"),
@@ -73,7 +71,6 @@ class ReturnOrder(models.Model):
     comment = models.TextField()
     transaction = models.TextField(blank=True)
     complite_status = models.BooleanField(default=False)
-    
+
     def __str__(self) -> str:
         return f"{self.nr_order} - {self.shop}"
-    
