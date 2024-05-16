@@ -8,10 +8,15 @@
    role="button" href="{% url 'zwroty:create_return_order' %}" 
    style="font-size: 30px; padding: 10px;">Nowy Zwrot</a>
 <br>
+
+
+<a class="btn btn-outline-secondary d-flex align-items-center justify-content-center" 
+    role="button" href="{% url 'zwroty:report_wz' %}" 
+    style="font-size: 30px; padding: 10px;">RAPORT WZ </a><br>
+
 <a class="btn btn-outline-secondary d-flex align-items-center justify-content-center" 
     role="button" href="{% url 'zwroty:add_line_menu' %}" 
     style="font-size: 30px; padding: 10px;">ADD LINE </a><br>
-
 {% if request.user.is_authenticated %}
     <form action="{% url 'logout' %}" method="post" class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
       {% csrf_token %}

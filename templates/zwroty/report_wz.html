@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block navigation %}
+    <nav  class="navigation">
+     <a class="btn btn-secondary" role="button" href="{% url 'zwroty:home' %}">Home</a>
+    </nav>
+{% endblock %}
+
+{% block content %}
+   <form method="post" action="{% url 'zwroty:report_wz' %}" target="_blank">
+     {% csrf_token %}
+    <div class="input-group mb-3" type="number">
+    <span class="input-group-text" id="inputGroup-sizing-default">WPROWADZ DATA: </span>
+    <input name="day", id="day" type="date" class="form-control" aria-describedby="inputGroup-sizing-default">
+    </div>
+
+    <button type="submit" class="btn btn-secondary">Generowac</button>
+    
+   </form>
+{% endblock %}
