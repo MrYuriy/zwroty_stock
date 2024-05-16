@@ -10,4 +10,3 @@ admin.site.register(Barcode)
 admin.site.register(Product)
 admin.site.register(ReasoneComment)
 admin.site.register(ReturnOrder)
-
