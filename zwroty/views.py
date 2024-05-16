@@ -1,13 +1,21 @@
+import datetime
+import io
 import os
 from django.conf import settings
-from django.http import HttpResponseRedirect
+from django.http import FileResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.views import View
+from datetime import datetime, timedelta
 from .models import Product, ReturnOrder, Shop, ReasoneComment, SkuInformation
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
+from reportlab.pdfgen import canvas
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.graphics.barcode import code128
+import emoji
 
 
 class HomeView(View):
@@ -124,3 +132,37 @@ class AddProduct(View):
             cached_value = [order_line]
         cache.set(identifier, cached_value, timeout=300)
         return HttpResponseRedirect(reverse('zwroty:add_product') + '?identifier=' + str(identifier))
+
+
+class ReportWZView(View):
+    template_name = "zwroty/report_wz.html"
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+    def post(self, request, *args, **kwargs):
+        rec_day = self.request.POST.get("day")
+        rec_day = datetime.strptime(rec_day, "%Y-%m-%d")
+
+        order_list = ReturnOrder.objects.filter(
+            complite_status=False, date_recive__date=rec_day
+            )
+            
+
+        buffer = io.BytesIO()
+        my_canvas = canvas.Canvas(buffer)
+        
+        pdfmetrics.registerFont(TTFont("FreeSans", "freesans/FreeSans.ttf"))
+        for order in order_list:
+            my_canvas.setFont("FreeSans", 20)
+            barcode = code128.Code128(f"{order.identifier}", barWidth=1.7, barHeight=35)
+            barcode.drawOn(my_canvas, 80, 564)
+            
+            my_canvas.drawString(100, 654, f"Bon wyjścia: {order.nr_order}")
+            my_canvas.drawString(100, 634, f"Numer wuzetki: {order.position_nr}")
+            my_canvas.drawString(100, 614, f"Sklep: {order.shop.description}")
+            my_canvas.drawString(300, 570, f"<-- Zeskanuj to ({order.identifier})")
+            my_canvas.showPage()
+        my_canvas.save()
+        buffer.seek(0)
+        response = FileResponse(buffer, as_attachment=False, filename="Protokół szkody.pdf")
+        return response

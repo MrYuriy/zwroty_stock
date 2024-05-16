@@ -59,8 +59,8 @@ class Product(models.Model):
 
 
 class ReturnOrder(models.Model):
-    nr_order = models.CharField(max_length=20)
-    position_nr = models.IntegerField()
+    nr_order = models.CharField(max_length=20)#bon wyjszcia
+    position_nr = models.IntegerField()#NR WZ
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product)
 

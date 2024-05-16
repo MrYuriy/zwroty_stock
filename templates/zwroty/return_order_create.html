@@ -14,17 +14,17 @@
     {% csrf_token %}
         <div class="input-group mb-3" type="text">
             <span class="input-group-text" id="inputGroup-sizing-default">BON WYJ:</span>
-            <input id="order_number" name="order_number" type="text" class="form-control "><br>
+            <input id="order_number" name="order_number" type="text" class="form-control "required><br>
         </div>
 
         <div class="input-group mb-3" type="text">
             <span class="input-group-text" id="inputGroup-sizing-default">Nr WYZETKI:</span>
-            <input id="wz_nr" name="wz_nr" type="number" class="form-control "><br>
+            <input id="wz_nr" name="wz_nr" type="number" class="form-control "required><br>
         </div>
 
         <div class="input-group mb-3" type="text">
             <span class="input-group-text" id="inputGroup-sizing-default">Nr Sklepu:</span>
-            <input id="shop" name="shop" type="number" class="form-control "><br>
+            <input id="shop" name="shop" type="number" class="form-control "required><br>
         </div>
 
         {% comment %} <div class="input-group mb-3" type="text">
