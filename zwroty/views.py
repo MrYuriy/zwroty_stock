@@ -103,6 +103,7 @@ class AddProduct(View):
             ])
            
             order.products.add(*product_list)
+            order.complite_status = True
             order.save()
             cached_value = cache.get(identifier)
             return redirect("zwroty:home")
