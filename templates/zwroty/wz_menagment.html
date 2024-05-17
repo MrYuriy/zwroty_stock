@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block navigation %}
+    <nav class="navigation">
+        <a class="btn btn-secondary" role="button" href="{% url 'zwroty:home' %}"
+        style="font-size: 30px; padding: 10px;"
+        >Do głównej</a> 
+    </nav>
+{% endblock %}
+
+
+{% block content %}
+<a class="btn btn-outline-secondary d-flex align-items-center justify-content-center" 
+    role="button" href="{% url 'zwroty:report_wz' %}" 
+    style="font-size: 30px; padding: 10px;">RAPORT WZ </a><br>
+
+<a class="btn btn-outline-secondary d-flex align-items-center justify-content-center" 
+    role="button" href="{% url 'zwroty:order_filter_page' %}" 
+    style="font-size: 30px; padding: 10px;">Lista WZ </a><br>
+
+<br>
+<br>
+{% endblock %}

@@ -17,9 +17,18 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.graphics.barcode import code128
 
 
+def admin_panel(request):
+    return render(request, "zwroty/admin_panel.html")
 
 class HomeView(LoginRequiredMixin, View):
     template_name = "index.html"
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+    
+
+class WZMenagment(LoginRequiredMixin, View):
+    template_name = "zwroty/wz_menagment.html"
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name)
