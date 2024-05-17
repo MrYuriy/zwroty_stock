@@ -13,7 +13,7 @@
 <form method="post" action="{% url 'zwroty:add_product' %}" enctype="multipart/home">
     {% csrf_token %}
         <input type="hidden", name="identifier", value="{{ identifier }}" , id="finish">
-        <select id="reason_name" name="reason_name" class="form-select" onchange="showInput()">
+        <select id="reason_name" name="reason_name" class="form-select" onchange="showInput()" required>
             <option  disabled selected value="" >Powod</option>
             {% for reason in reasons %}
             <option value="{{ reason.name }}">{{ reason.name }}</option>
@@ -23,11 +23,11 @@
         <div id="inputField" style="display:none;">
             <div class="input-group mb-3" type="text" >
                 <span class="input-group-text" style="width: 45%;">wprowadz opis productu</span>
-                <input type="text" style="width: 55%;" id="textInput" name="sku_deskription" class="form-control "><br>
+                <input type="text" style="width: 55%;" id="textInput" name="sku_deskription" class="form-control" required><br>
             </div>
         </div>
 
-        <select id="tape_of_delivery" name="tape_of_delivery" class="form-select">
+        <select id="tape_of_delivery" name="tape_of_delivery" class="form-select" required>
             <option  disabled selected value="" >Sposób dostawy</option>
             <option value="C">Paczka</option>
             <option value="P">Paleta</option>
@@ -35,12 +35,12 @@
 
         <div class="input-group mb-3" type="text">
             <span class="input-group-text" id="inputGroup-sizing-default">EAN:</span>
-            <input id="ean" name="ean" type="text" class="form-control "><br>
+            <input id="ean" name="ean" type="text" class="form-control" required><br>
         </div>
 
         <div class="input-group mb-3" type="text">
             <span class="input-group-text" id="inputGroup-sizing-default">QTY:</span>
-            <input id="qty" name="qty" type="number" class="form-control "><br>
+            <input id="qty" name="qty" type="number" class="form-control" required><br>
         </div>
         
         <input class="btn btn-secondary" type="submit" value="CONTUNUJ" style="width: 100%;">    
