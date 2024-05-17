@@ -13,12 +13,14 @@ class Shop(models.Model):
 
 class SkuInformation(models.Model):
     sku_log = models.IntegerField()
-    sku_hand = models.IntegerField(default=0)
-    name_of_product = models.CharField(max_length=100)
+    sku_hand = models.IntegerField(blank=True, null=True)
+    name_of_product = models.CharField(max_length=100, blank=True, null=True)
     barcodes = models.ManyToManyField("Barcode")
 
     def __str__(self):
-        return f"{self.sku_log} {self.name_of_product}"
+        if self.name_of_product:
+            return f"{self.sku_log} {self.name_of_product}"
+        return str(self.sku_log)
 
 
 class Barcode(models.Model):
@@ -45,7 +47,7 @@ class Product(models.Model):
     ]
     sku = models.ForeignKey("SkuInformation", on_delete=models.CASCADE, null=True)
     quantity = models.IntegerField()
-
+    actual_barcode = models.CharField(max_length=20)
     tape_of_delivery = models.CharField(
         max_length=1,
         choices=TAPE_OF_DELIVERY_CHOICES,
@@ -55,7 +57,9 @@ class Product(models.Model):
     reasone = models.ForeignKey(ReasoneComment, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return self.sku.name_of_product
+        if not self.sku.name_of_product:
+            return f"{self.sku.sku_log} - {self.quantity}"
+        return str(self.sku.name_of_product)
 
 
 class ReturnOrder(models.Model):

@@ -8,7 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.views import View
 from datetime import datetime
-from .models import Product, ReturnOrder, Shop, ReasoneComment, SkuInformation
+from .models import Barcode, Product, ReturnOrder, Shop, ReasoneComment, SkuInformation
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from reportlab.pdfgen import canvas
@@ -103,7 +103,8 @@ class AddProduct(View):
                     sku = line["sku"],
                     quantity = line["qty"],
                     tape_of_delivery = line["tape_of_delivery"],
-                    reasone = reas_queryset.get(name=line["reas_name"])
+                    reasone = reas_queryset.get(name=line["reas_name"]),
+                    actual_barcode = line["ean"]
                 )
                 for line in cache.get(identifier)
             ])
@@ -114,13 +115,26 @@ class AddProduct(View):
             cached_value = cache.get(identifier)
             cache.delete(identifier)
             return redirect("zwroty:home")
+        
         sku = SkuInformation.objects.filter(barcodes__barcode = ean).first()
+        if not sku:
+            barcode = Barcode(barcode=ean)
+            barcode.save()
+            description = ""
+            if sku_deskript:
+                description = sku_deskript
+            sku = SkuInformation(
+                sku_log=ean,name_of_product=description
+            )
+            sku.save()
+            sku.barcodes.add(barcode)
 
         order_line = {
                 "user": user, 
                 "qty": qty,
                 "reas_name": reas_name, 
-                "sku": sku, 
+                "sku": sku,
+                "ean": ean, 
                 "tape_of_delivery": tape_of_delivery, 
                 }
 
@@ -207,7 +221,7 @@ class ReturnOrderDetailView(View):
         context["order_products"] = [
             f"sku_log: {product.sku.sku_log}\n\
                 sku_hand: {product.sku.sku_hand}\n\
-                    sku_ean: {product.sku.barcodes.all().first()}\n" \
+                    sku_ean: {product.actual_barcode}\n" \
                 for product in order.products.all()]
         return context
 
