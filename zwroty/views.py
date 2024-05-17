@@ -18,14 +18,14 @@ from reportlab.graphics.barcode import code128
 
 
 
-class HomeView(View):
+class HomeView(LoginRequiredMixin, View):
     template_name = "index.html"
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name)
 
 
-class ReturnOrderCreate(View):
+class ReturnOrderCreate(LoginRequiredMixin, View):
     template_name = "zwroty/return_order_create.html"
 
     def get(self, request, *args, **kwargs):
@@ -52,10 +52,7 @@ class ReturnOrderCreate(View):
         return render(request, "index.html")
 
 
-# def add_line_menu(request):
-#     return render(request, "zwroty/add_line_menu.html")
-
-class AddLineMenuView(View):
+class AddLineMenuView(LoginRequiredMixin, View):
     def get(self, request):
         return render(request, "zwroty/add_line_menu.html")
     def post(self, request, *args, **kwargs):
@@ -70,7 +67,7 @@ class AddLineMenuView(View):
                 )
         return HttpResponseRedirect(reverse('zwroty:add_product') + '?identifier=' + str(identifier))
 
-class AddProduct(View):
+class AddProduct(LoginRequiredMixin, View):
     template_name = "zwroty/add_product.html"
 
     def get_context_data(self, **kwargs):
@@ -147,7 +144,7 @@ class AddProduct(View):
         return HttpResponseRedirect(reverse('zwroty:add_product') + '?identifier=' + str(identifier))
 
 
-class ReportWZView(View):
+class ReportWZView(LoginRequiredMixin, View):
     template_name = "zwroty/report_wz.html"
 
     def get(self, request, *args, **kwargs):
@@ -178,7 +175,7 @@ class ReportWZView(View):
         response = FileResponse(buffer, as_attachment=False, filename="Protokół szkody.pdf")
         return response
     
-class OrderStorageView(View):
+class OrderStorageView(LoginRequiredMixin, View):
     template_name = "zwroty/return_order_filter.html"
 
     def get(self, request, *args, **kwargs):
@@ -211,7 +208,7 @@ class OrderStorageView(View):
         return render(request, "zwroty/return_order_list.html", context)
 
 
-class ReturnOrderDetailView(View):
+class ReturnOrderDetailView(LoginRequiredMixin, View):
     def get_context_data(self, oredr_id):
         context = {}
         order = get_object_or_404(ReturnOrder, id=oredr_id)
@@ -233,7 +230,7 @@ class ReturnOrderDetailView(View):
         return render(request, "zwroty/return_order_detail.html", context)
 
 
-class ReturnOrderListView(View):
+class ReturnOrderListView(LoginRequiredMixin, View):
     template_name = "zwroty/return_order_list.html"
 
     def get(self, request, *args, **kwargs):
