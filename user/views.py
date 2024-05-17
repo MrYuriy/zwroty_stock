@@ -39,7 +39,10 @@ class UserCreateView(LoginRequiredMixin, generic.CreateView):
     def form_valid(self, form):
         user = form.save(commit=False)
 
+        role = self.request.POST.get("role")  # Get the selected role from the request
         full_name = self.request.POST.get("full_name")
+        if role:
+            user.role = role
 
         if full_name:
             user.full_name = full_name
@@ -51,6 +54,8 @@ class UserCreateView(LoginRequiredMixin, generic.CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["user_role"] = User.USER_ROLE_CHOICES
+
         return context
 
 
@@ -61,7 +66,11 @@ class UserUpdateView(LoginRequiredMixin, generic.UpdateView):
     def form_valid(self, form):
         user = form.save(commit=False)
 
+        # Set user"s role
+        role = self.request.POST.get("role")
         full_name = self.request.POST.get("full_name")
+        if role:
+            user.role = role
 
         if full_name:
             user.full_name = full_name
@@ -81,6 +90,7 @@ class UserUpdateView(LoginRequiredMixin, generic.UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["user_role"] = User.USER_ROLE_CHOICES
         return context
 
 
