@@ -121,14 +121,15 @@ class AddProduct(LoginRequiredMixin, View):
             cached_value = cache.get(identifier)
             cache.delete(identifier)
             return redirect("zwroty:home")
-        
+        print(type(ean), ean)
         sku = SkuInformation.objects.filter(barcodes__barcode = ean).first()
-        if not sku:
-            barcode = Barcode(barcode=ean)
-            barcode.save()
+        if not sku or int(ean) == 999999999999:
+            barcode, _ = Barcode.objects.get_or_create(barcode=ean)
+
             description = ""
             if sku_deskript:
                 description = sku_deskript
+                
             sku = SkuInformation(
                 sku_log=ean,name_of_product=description
             )
@@ -228,7 +229,8 @@ class ReturnOrderDetailView(LoginRequiredMixin, View):
             f"sku_log: {product.sku.sku_log}\n\
                 sku_hand: {product.sku.sku_hand}\n\
                     sku_ean: {product.actual_barcode}\n\
-                        sku_deskript: {product.sku.name_of_product}" 
+                        sku_deskript: {product.sku.name_of_product}\n\
+                            typ: {product.reasone.name}" 
                         
                 for product in order.products.all()]
         return context

@@ -10,13 +10,20 @@
           var select = document.getElementById("reason_name");
           var inputField = document.getElementById("inputField");
           var selectedValue = select.value;
+          var eanValue = document.getElementById("ean")
       
           if (selectedValue === "Towar niemagazynowy") {
             inputField.style.display = "block";
             document.getElementById("textInput").required = true; 
+          } else if (selectedValue === "Brak oznaczeń magazynowych") {
+            inputField.style.display = "block";
+            document.getElementById("textInput").required = true;
+            eanValue.value = 999999999999;
+
           } else {
             inputField.style.display = "none";
             document.getElementById("textInput").required = false;
+            eanValue.value = "";
           }
         }
     </script>
