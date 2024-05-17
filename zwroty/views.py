@@ -221,7 +221,9 @@ class ReturnOrderDetailView(View):
         context["order_products"] = [
             f"sku_log: {product.sku.sku_log}\n\
                 sku_hand: {product.sku.sku_hand}\n\
-                    sku_ean: {product.actual_barcode}\n" \
+                    sku_ean: {product.actual_barcode}\n\
+                        sku_deskript: {product.sku.name_of_product}" 
+                        
                 for product in order.products.all()]
         return context
 
