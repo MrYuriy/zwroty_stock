@@ -1,6 +1,5 @@
 import datetime
 import io
-import os
 from django.conf import settings
 from django.http import FileResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
