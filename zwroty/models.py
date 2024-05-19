@@ -13,9 +13,8 @@ class Shop(models.Model):
 
 class SkuInformation(models.Model):
     sku_log = models.IntegerField()
-    sku_hand = models.IntegerField(blank=True, null=True)
+    sku_hand = models.BigIntegerField(blank=True, null=True)
     name_of_product = models.CharField(max_length=100, blank=True, null=True)
-    barcodes = models.ManyToManyField("Barcode")
 
     def __str__(self):
         if self.name_of_product:
@@ -29,6 +28,13 @@ class Barcode(models.Model):
     def __str__(self):
         return self.barcode
 
+
+class SkuInformationBarcode(models.Model):
+    barcode = models.ForeignKey(Barcode, on_delete=models.CASCADE)
+    sku_information = models.ForeignKey(SkuInformation, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.sku_information} {self.barcode}"
 
 class ReasoneComment(models.Model):
     name = models.CharField(max_length=100)
