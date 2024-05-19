@@ -8,7 +8,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.views import View
 from datetime import datetime
-from .models import Barcode, Product, ReturnOrder, Shop, ReasoneComment, SkuInformation
+from .models import (
+    Barcode, Product, 
+    ReturnOrder, Shop, 
+    ReasoneComment, SkuInformation,
+    SkuInformationBarcode
+    )
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from reportlab.pdfgen import canvas
@@ -121,8 +126,19 @@ class AddProduct(LoginRequiredMixin, View):
             cached_value = cache.get(identifier)
             cache.delete(identifier)
             return redirect("zwroty:home")
-        print(type(ean), ean)
-        sku = SkuInformation.objects.filter(barcodes__barcode = ean).first()
+
+
+
+        sku_inform_barcode = SkuInformationBarcode.objects.filter(
+            barcode__barcode__icontains=ean
+            )
+        if sku_inform_barcode:
+            if len(sku_inform_barcode)>1:
+                sku_inform_barcode=sku_inform_barcode.filter(barcode__barcode=ean)
+            sku = sku_inform_barcode[0].sku_information
+        else:
+            sku = None
+
         if not sku or int(ean) == 999999999999:
             barcode, _ = Barcode.objects.get_or_create(barcode=ean)
 
@@ -133,8 +149,13 @@ class AddProduct(LoginRequiredMixin, View):
             sku = SkuInformation(
                 sku_log=ean,name_of_product=description
             )
+
             sku.save()
-            sku.barcodes.add(barcode)
+            sku_inform_barcode = SkuInformationBarcode(
+                barcode = barcode,
+                sku_information = sku
+            )
+            sku_inform_barcode.save()
 
         order_line = {
                 "user": user, 

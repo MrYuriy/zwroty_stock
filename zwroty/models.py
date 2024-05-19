@@ -12,7 +12,7 @@ class Shop(models.Model):
 
 
 class SkuInformation(models.Model):
-    sku_log = models.IntegerField()
+    sku_log = models.BigIntegerField()
     sku_hand = models.BigIntegerField(blank=True, null=True)
     name_of_product = models.CharField(max_length=100, blank=True, null=True)
 
