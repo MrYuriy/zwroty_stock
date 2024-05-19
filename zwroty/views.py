@@ -70,8 +70,18 @@ class AddLineMenuView(LoginRequiredMixin, View):
         return render(request, "zwroty/add_line_menu.html")
     def post(self, request, *args, **kwargs):
         identifier = request.POST.get('identifier', None)
+        compile_exces = request.POST.get("compile_exces", None)
+        print(compile_exces, identifier)
         try:
-            ReturnOrder.objects.get(identifier=identifier)
+            order = ReturnOrder.objects.get(identifier=identifier)
+            if compile_exces:
+                return HttpResponseRedirect(reverse('zwroty:add_product') + '?identifier=' + str(identifier))
+            if order.complite_status:
+              return render(
+                request, 
+                "zwroty/add_line_menu.html", 
+                context={"error_message": "Order complite Are you shure", "complite":True, "identifier":identifier}
+                )  
         except ObjectDoesNotExist:
             return render(
                 request, 
