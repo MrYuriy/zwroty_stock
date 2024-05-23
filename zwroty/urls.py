@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from .views import (
     ReturnOrderCreate, 
     HomeView, AddProduct, 
@@ -12,6 +12,7 @@ from .views import (
 
 urlpatterns = [
     path("", HomeView.as_view(), name="home"),
+    path("api/", include("zwroty.api.urls")),
     path(
         "return-order-create/", ReturnOrderCreate.as_view(), name="create_return_order"
     ),

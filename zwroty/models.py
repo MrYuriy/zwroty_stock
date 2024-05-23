@@ -44,8 +44,8 @@ class ReasoneComment(models.Model):
 
 
 class Product(models.Model):
-    PALLET = "P"
-    BOX = "C"
+    PALLET = "op."
+    BOX = "pall."
 
     TAPE_OF_DELIVERY_CHOICES = [
         (PALLET, "Pallet"),
@@ -55,7 +55,7 @@ class Product(models.Model):
     quantity = models.IntegerField()
     actual_barcode = models.CharField(max_length=20)
     tape_of_delivery = models.CharField(
-        max_length=1,
+        max_length=5,
         choices=TAPE_OF_DELIVERY_CHOICES,
         default=BOX,
         verbose_name="tape_of_delivery",
