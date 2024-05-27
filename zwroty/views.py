@@ -211,7 +211,8 @@ class ReportWZView(LoginRequiredMixin, View):
             barcode = code128.Code128(f"{order.identifier}", barWidth=1.7, barHeight=35)
             barcode.drawOn(my_canvas, 80, 564)
             
-            my_canvas.drawString(100, 674, f'Data: {datetime.strftime(order.date_recive, "%Y-%m-%d")}')
+            rec_data = datetime.strftime(order.date_recive, "%Y-%m-%d")
+            my_canvas.drawString(100, 674, f'Data: {rec_data}')
             my_canvas.drawString(100, 654, f"Bon wyjścia: {order.nr_order}")
             my_canvas.drawString(100, 634, f"Numer wuzetki: {order.position_nr}")
             my_canvas.drawString(100, 614, f"Sklep: {order.shop.description}")
