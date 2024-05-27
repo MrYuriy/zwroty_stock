@@ -10,8 +10,13 @@
    <form method="post" action="{% url 'zwroty:report_wz' %}" target="_blank">
      {% csrf_token %}
     <div class="input-group mb-3" type="number">
-    <span class="input-group-text" id="inputGroup-sizing-default">WPROWADZ DATA: </span>
-    <input name="day", id="day" type="date" class="form-control" aria-describedby="inputGroup-sizing-default" required>
+      <span class="input-group-text" id="inputGroup-sizing-default">WPROWADZ DATA OD: </span>
+      <input name="day_aft", id="day_aft" type="date" class="form-control" aria-describedby="inputGroup-sizing-default">
+    </div>
+
+    <div class="input-group mb-3" type="number">
+      <span class="input-group-text" id="inputGroup-sizing-default">WPROWADZ DATA DO: </span>
+      <input name="day_bef", id="day_bef" type="date" class="form-control" aria-describedby="inputGroup-sizing-default">
     </div>
 
     <button type="submit" class="btn btn-secondary">Generowac</button>

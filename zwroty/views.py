@@ -190,12 +190,18 @@ class ReportWZView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name)
     def post(self, request, *args, **kwargs):
-        rec_day = self.request.POST.get("day")
-        rec_day = datetime.strptime(rec_day, "%Y-%m-%d")
+        rec_day_aft = self.request.POST.get("day_aft", None)
+        rec_day_bef = self.request.POST.get("day_bef", None)
 
-        order_list = ReturnOrder.objects.filter(
-            complite_status=False, date_recive__date=rec_day
-            )
+
+        order_list = ReturnOrder.objects.filter(complite_status=False)
+        if rec_day_aft:
+            rec_day_aft = datetime.strptime(rec_day_aft, "%Y-%m-%d")
+            order_list = order_list.filter(date_recive__date__gte=rec_day_aft)
+        if rec_day_bef:
+            rec_day_bef = datetime.strptime(rec_day_bef, "%Y-%m-%d")
+            order_list = order_list.filter(date_recive__date__lte=rec_day_bef)
+
         buffer = io.BytesIO()
         my_canvas = canvas.Canvas(buffer)
         
