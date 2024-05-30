@@ -1,10 +1,11 @@
 {% extends "base.html" %}
-
+{% load crispy_forms_filters %}
+{% load static %}
 {% block navigation %}
     <nav class="navigation">
-        <a class="btn btn-secondary" role="button" href="{% url 'zwroty:home' %}"
-        style="font-size: 30px; padding: 10px;"
-        >Do głównej</a> 
+        <a class="btn btn-secondary"  role="button" href="{% url 'zwroty:home' %}"title="Do główną">
+            <img src="{% static '/img/house.svg' %}" alt="Do główną">
+        </a> 
     </nav>
 {% endblock %}
 
