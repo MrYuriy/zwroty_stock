@@ -24,11 +24,16 @@ class WZApiView(APIView):
             }
             
             for product in order.products.all():
+
+                sku_log = product.sku.sku_log
+                sku_hand = product.sku.sku_hand
+                name_of_product = product.sku.name_of_product
+
                 product_data = {
                     "reasone":  product.reasone.name,
-                    "sku_log": "" if product.sku.sku_log == None else str(product.sku.sku_log).replace("999999999999",""),
-                    "sku_hand": "" if product.sku.sku_hand == None else str(product.sku.sku_hand),
-                    "descript": "" if product.sku.name_of_product == None else product.sku.name_of_product,
+                    "sku_log": "" if sku_log == None or len(str(sku_log))>8 else str(sku_log).replace("999999999999",""),
+                    "sku_hand": "" if sku_hand == None or len(str(sku_hand))>8 else str(sku_hand),
+                    "descript": "" if name_of_product == None else name_of_product,
                     "qty": f"{product.quantity} {product.tape_of_delivery}"
                 }
                 order_data["lines"].append(product_data)
