@@ -5,8 +5,9 @@ from zwroty.models import ReturnOrder
 
 class WZApiView(APIView):
     def get(self, request):
-        orders = ReturnOrder.objects.filter(complite_status=True)\
-            .select_related("shop", "user").prefetch_related(
+        orders = ReturnOrder.objects.filter(
+            complite_status=True, generate_xls_status=False
+            ).select_related("shop", "user").prefetch_related(
         "products__sku",
         "products__reasone",
     )
@@ -39,6 +40,6 @@ class WZApiView(APIView):
                 order_data["lines"].append(product_data)
             order_list.append(order_data)
 
-
+        orders.update(generate_xls_status=True)
 
         return Response(order_list)

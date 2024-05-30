@@ -80,6 +80,7 @@ class ReturnOrder(models.Model):
     comment = models.TextField(blank=True, null=True)
     transaction = models.TextField(blank=True)
     complite_status = models.BooleanField(default=False)
+    generate_xls_status = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return f"{self.nr_order} - {self.shop}"

@@ -9,16 +9,40 @@
         <img src="{% static '/img/arrow-bend-up-left.svg' %}" alt="Wróć">
     </a>
 
+    <form action="{% url 'zwroty:return_order_detail' pk=order.id %}" method="post" style="display: inline; float: right;">
+        {% csrf_token %}
+        <input type="hidden" name="delete_order" value="{{ order.id }}" id="return_order_id">
+        <button type="submit" class="btn btn-outline-secondary" title="Delete">
+            <img src="{% static '/img/trash.svg' %}" alt="Delete">
+        </button>
+    </form>
+
+    {% if order.generate_xls_status %}
+    <form action="{% url 'zwroty:return_order_detail' pk=order.id %}" method="post" style="display: inline; float: right;">
+        {% csrf_token %}
+        <input type="hidden" name="unprint" value="{{ order.id }}" id="return_order_id">
+        <button type="submit" class="btn btn-outline-secondary" title="Unprint">
+            <img src="{% static '/img/printer.svg' %}" alt="Unprint">
+        </button>
+    </form>
+    {% endif %}  
 
 
     
     <form action="{% url 'zwroty:return_order_detail' pk=order.id %}" method="post" style="display: inline; float: right;">
         {% csrf_token %}
-        <input type="hidden" name="delete_order" value="{{ order.id }}" id="return_order_id">
-        <button type="submit" class="btn btn-outline-secondary" title="Delete">
-            <img src="{% static '/img/trash.svg' %}" alt="wygeneruj raport uszkodzeń PDF">
+        <input type="hidden" name="ureverse_complete_status" value="{{ order.id }}" id="return_order_id">
+        {% if  order.complite_status %}
+        <button type="submit" class="btn btn-outline-secondary" title="Uncomplete">
+            <img src="{% static '/img/uncomplete.svg' %}" alt="Uncomplete">
         </button>
+        {% else %}
+        <button type="submit" class="btn btn-outline-secondary" title="Uncomplete">
+            <img src="{% static '/img/check-fat.svg' %}" alt="Complete">
+        </button>
+        {% endif %}
     </form>
+     
 {% endblock %}
 
 {% block content %}

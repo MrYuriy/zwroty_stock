@@ -257,15 +257,18 @@ class ReturnOrderDetailView(LoginRequiredMixin, View):
         return_order_id = self.kwargs.get("pk")
         delete_order = self.request.POST.get("delete_order")
         unprint = self.request.POST.get("unprint")
-        uncoplite = self.request.POST.get("uncomplite")
+        revese_complete = self.request.POST.get("ureverse_complete_status")
         return_order = ReturnOrder.objects.get(id=return_order_id)
         if unprint:
-            print(unprint)
+            return_order.generate_xls_status = False
+        if revese_complete:
+            return_order.complite_status = not return_order.complite_status
+        
+        return_order.save()
+
         if delete_order:
             return_order.delete()
             return redirect("zwroty:order_filter_page")
-        if unprint:
-            print(uncoplite)
         return redirect("zwroty:return_order_detail", pk=return_order_id)
 
 class ReturnOrderListView(LoginRequiredMixin, View):
