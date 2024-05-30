@@ -1,7 +1,7 @@
 from datetime import datetime
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, pre_delete
 from django.dispatch import receiver
-from .models import ReturnOrder
+from .models import ReturnOrder, Product
 import uuid
 
 
@@ -12,3 +12,8 @@ def generate_order_number(sender, instance, **kwargs):
     now = datetime.now()
     if not instance.identifier:
         instance.identifier = int(now.strftime("%Y%m%d")[2:] + unik_id[-6:])
+
+@receiver(pre_delete, sender=ReturnOrder)
+def delete_products_from_opder(sender, instance, **kwargs):
+    products = instance.products.all()
+    products.delete()

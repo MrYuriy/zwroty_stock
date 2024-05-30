@@ -253,6 +253,20 @@ class ReturnOrderDetailView(LoginRequiredMixin, View):
         context = self.get_context_data(oredr_id=order_id)
         return render(request, "zwroty/return_order_detail.html", context)
 
+    def post(self, request, *args, **kwargs):
+        return_order_id = self.kwargs.get("pk")
+        delete_order = self.request.POST.get("delete_order")
+        unprint = self.request.POST.get("unprint")
+        uncoplite = self.request.POST.get("uncomplite")
+        return_order = ReturnOrder.objects.get(id=return_order_id)
+        if unprint:
+            print(unprint)
+        if delete_order:
+            return_order.delete()
+            return redirect("zwroty:order_filter_page")
+        if unprint:
+            print(uncoplite)
+        return redirect("zwroty:return_order_detail", pk=return_order_id)
 
 class ReturnOrderListView(LoginRequiredMixin, View):
     template_name = "zwroty/return_order_list.html"

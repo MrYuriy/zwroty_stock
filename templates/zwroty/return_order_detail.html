@@ -2,9 +2,23 @@
 {% load crispy_forms_filters %}
 {% load static %}
 {% block navigation %}
-    <a class="btn btn-secondary"  role="button" href="{% url 'zwroty:home' %}">Do głównej</a>
+    <a class="btn btn-secondary"  role="button" href="{% url 'zwroty:home' %}"title="Do główną">
+        <img src="{% static '/img/house.svg' %}" alt="Do główną">
+    </a> 
+    <a class="btn btn-outline-secondary" role="button" href="{% url 'zwroty:order_filter_page' %}" title="Wróć">
+        <img src="{% static '/img/arrow-bend-up-left.svg' %}" alt="Wróć">
+    </a>
+
+
+
     
-    <a class="btn btn-outline-secondary" role="button" href="{% url 'zwroty:order_filter_page' %}" title="Wróć">Wróć</a> 
+    <form action="{% url 'zwroty:return_order_detail' pk=order.id %}" method="post" style="display: inline; float: right;">
+        {% csrf_token %}
+        <input type="hidden" name="delete_order" value="{{ order.id }}" id="return_order_id">
+        <button type="submit" class="btn btn-outline-secondary" title="Delete">
+            <img src="{% static '/img/trash.svg' %}" alt="wygeneruj raport uszkodzeń PDF">
+        </button>
+    </form>
 {% endblock %}
 
 {% block content %}
