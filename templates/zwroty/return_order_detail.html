@@ -2,7 +2,7 @@
 {% load crispy_forms_filters %}
 {% load static %}
 {% block navigation %}
-    <a class="btn btn-secondary"  role="button" href="{% url 'zwroty:home' %}"title="Do główną">
+    <a class="btn btn-secondary" role="button" href="{% url 'zwroty:home' %}" title="Do główną">
         <img src="{% static '/img/house.svg' %}" alt="Do główną">
     </a> 
     <a class="btn btn-outline-secondary" role="button" href="{% url 'zwroty:order_filter_page' %}" title="Wróć">
@@ -32,12 +32,12 @@
     <form action="{% url 'zwroty:return_order_detail' pk=order.id %}" method="post" style="display: inline; float: right;">
         {% csrf_token %}
         <input type="hidden" name="ureverse_complete_status" value="{{ order.id }}" id="return_order_id">
-        {% if  order.complite_status %}
+        {% if order.complite_status %}
         <button type="submit" class="btn btn-outline-secondary" title="Uncomplete">
             <img src="{% static '/img/uncomplete.svg' %}" alt="Uncomplete">
         </button>
         {% else %}
-        <button type="submit" class="btn btn-outline-secondary" title="Uncomplete">
+        <button type="submit" class="btn btn-outline-secondary" title="Complete">
             <img src="{% static '/img/check-fat.svg' %}" alt="Complete">
         </button>
         {% endif %}
@@ -46,9 +46,7 @@
 {% endblock %}
 
 {% block content %}
-
     <div>
-        {% csrf_token %}
         <p class="alert alert-dark">Id: {{ order.identifier }}</p>
         <p class="alert alert-dark">Bon wyjścia:: {{ order.nr_order }}</p>
         <p class="alert alert-dark">Numer wuzetki: {{ order.position_nr }}</p>
@@ -60,13 +58,19 @@
                 Nie Zrobione
             {% endif %}
         </p>
-        {% for sku in order_products %}
-        <p class="alert alert-dark">
-            
-                {{ sku | linebreaksbr }}
-           
-        </p>
-        {% endfor %}
-
+        
+        <!-- Form wrapping checkboxes -->
+        <form method="post" action="{% url 'zwroty:return_order_detail' pk=order.id %}">
+            {% csrf_token %}
+            {% for sku, product in order_products %}
+                <p class="alert alert-dark">
+                    <input type="checkbox" name="selected_products" value="{{ product.id }}">
+                    {{ sku | linebreaksbr }}
+                </p>
+            {% endfor %}
+            <button type="submit" class="btn btn-outline-secondary" title="Delete line" style="width: 100%; padding: 0; margin: 0;">
+                <img src="{% static '/img/trash-simple.svg' %}" alt="Delete line">
+            </button>
+        </form>
     </div>
 {% endblock %}

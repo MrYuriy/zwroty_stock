@@ -239,11 +239,12 @@ class ReturnOrderDetailView(LoginRequiredMixin, View):
         context["date_recive"] = date_recive
         context["order"] = order
         context["order_products"] = [
-            f"sku_log: {product.sku.sku_log}\n\
+            (f"sku_log: {product.sku.sku_log}\n\
                 sku_hand: {product.sku.sku_hand}\n\
                     sku_ean: {product.actual_barcode}\n\
                         sku_deskript: {product.sku.name_of_product}\n\
-                            typ: {product.reasone.name}" 
+                            typ: {product.reasone.name}",
+            product) 
                         
                 for product in order.products.all()]
         return context
@@ -264,6 +265,10 @@ class ReturnOrderDetailView(LoginRequiredMixin, View):
         if revese_complete:
             return_order.complite_status = not return_order.complite_status
         
+        selected_products_ids = request.POST.getlist("selected_products")
+        if selected_products_ids:
+            selected_products = Product.objects.filter(id__in=selected_products_ids)
+            selected_products.delete()
         return_order.save()
 
         if delete_order:
