@@ -79,7 +79,7 @@ class AddLineMenuView(LoginRequiredMixin, View):
               return render(
                 request, 
                 "zwroty/add_line_menu.html", 
-                context={"error_message": "Order complite Are you shure", "complite":True, "identifier":identifier}
+                context={"error_message": "Zamówienie zakończone. Czy na pewno chcesz kontynuować?", "complite":True, "identifier":identifier}
                 )  
         except ObjectDoesNotExist:
             return render(

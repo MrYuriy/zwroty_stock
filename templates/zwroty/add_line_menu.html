@@ -15,7 +15,10 @@
         <input type="number" style="width: 65%;" name="identifier" value="{{ identifier }}" required>
     </div>
 
-    <button type="submit" style="width: 100%;">contunuj</button>
+
+    {% if not error_message %}
+        <button type="submit" style="width: 100%;">contunuj</button>
+    {% endif %}
 </form>
 
 {% if error_message %}
