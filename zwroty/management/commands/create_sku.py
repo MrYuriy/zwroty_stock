@@ -4,13 +4,15 @@ from zwroty.models import SkuInformation, Barcode, SkuInformationBarcode
 from tqdm import tqdm
 from django.db import transaction
 from itertools import islice
+from sort_json import sort_sku_path
 
 
 class Command(BaseCommand):
     help = "Import data from export.json"
 
     def handle(self, *args, **options):
-        file_path = "sku_barcode.json"
+        file_path = sort_sku_path("sku_barcode.json")
+
         data = self.load_data(file_path)
         barcode_list, sku_inform_dict = self.process_data(data)
 
