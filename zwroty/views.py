@@ -7,6 +7,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.views import View
 from datetime import datetime
+
+from .get_or_create_sku import get_or_create_sku
 from .models import (
     Barcode, Product, 
     ReturnOrder, Shop, 
@@ -137,35 +139,7 @@ class AddProduct(LoginRequiredMixin, View):
             cache.delete(identifier)
             return redirect("zwroty:home")
 
-
-
-        sku_inform_barcode = SkuInformationBarcode.objects.filter(
-            barcode__barcode__icontains=ean
-            )
-        if sku_inform_barcode:
-            if len(sku_inform_barcode)>1:
-                sku_inform_barcode=sku_inform_barcode.filter(barcode__barcode=ean)
-            sku = sku_inform_barcode[0].sku_information
-        else:
-            sku = None
-
-        if not sku or int(ean) == 999999999999:
-            barcode, _ = Barcode.objects.get_or_create(barcode=ean)
-
-            description = ""
-            if sku_deskript:
-                description = sku_deskript
-                
-            sku = SkuInformation(
-                sku_log=ean,name_of_product=description
-            )
-
-            sku.save()
-            sku_inform_barcode = SkuInformationBarcode(
-                barcode = barcode,
-                sku_information = sku
-            )
-            sku_inform_barcode.save()
+        sku = get_or_create_sku(ean=ean, sku_description=sku_deskript)
 
         order_line = {
                 "user": user, 
