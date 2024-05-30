@@ -71,7 +71,6 @@ class AddLineMenuView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         identifier = request.POST.get('identifier', None)
         compile_exces = request.POST.get("compile_exces", None)
-        print(compile_exces, identifier)
         try:
             order = ReturnOrder.objects.get(identifier=identifier)
             if compile_exces:
@@ -131,6 +130,8 @@ class AddProduct(LoginRequiredMixin, View):
            
             order.products.add(*product_list)
             order.complite_status = True
+            order.user = user
+            order.date_recive = datetime.now()
             order.save()
             cached_value = cache.get(identifier)
             cache.delete(identifier)

@@ -72,7 +72,7 @@ class ReturnOrder(models.Model):
     nr_order = models.CharField(max_length=20)#bon wyjszcia
     position_nr = models.IntegerField()#NR WZ
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
-    products = models.ManyToManyField(Product)
+    products = models.ManyToManyField(Product, blank=True)
 
     identifier = models.BigIntegerField(unique=True)
     date_recive = models.DateTimeField(auto_now_add=True)
