@@ -76,12 +76,14 @@ class AddLineMenuView(LoginRequiredMixin, View):
         try:
             order = ReturnOrder.objects.get(identifier=identifier)
             if compile_exces:
+                order_line = order.products.all()
+                order_line.delete()
                 return HttpResponseRedirect(reverse('zwroty:add_product') + '?identifier=' + str(identifier))
             if order.complite_status:
               return render(
                 request, 
                 "zwroty/add_line_menu.html", 
-                context={"error_message": "Zamówienie zakończone. Czy na pewno chcesz kontynuować?", "complite":True, "identifier":identifier}
+                context={"error_message": "Uwaga ponowne otwrcie Wztki spowoduje utracenie dotychczasowych danych. Czy na pewno chcesz ją otworzyć?", "complite":True, "identifier":identifier}
                 )  
         except ObjectDoesNotExist:
             return render(
@@ -117,6 +119,11 @@ class AddProduct(LoginRequiredMixin, View):
         identifier = self.request.POST.get("identifier")
         
         if finish:
+            
+            cache_data = cache.get(identifier)
+
+            if cache_data is None:
+                return redirect("zwroty:home")
             reas_queryset = ReasoneComment.objects.all()
             order = ReturnOrder.objects.get(identifier=identifier)
             product_list = Product.objects.bulk_create([
@@ -127,7 +134,7 @@ class AddProduct(LoginRequiredMixin, View):
                     reasone = reas_queryset.get(name=line["reas_name"]),
                     actual_barcode = line["ean"]
                 )
-                for line in cache.get(identifier)
+                for line in cache_data
             ])
            
             order.products.add(*product_list)
