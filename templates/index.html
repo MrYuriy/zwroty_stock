@@ -5,14 +5,10 @@
 {% block content %}
 
 {%if request.user.role == 'leader' or request.user.role == 'admin' or request.user.is_superuser %}
-    <a class="btn btn-outline-secondary d-flex align-items-center justify-content-center" 
-    role="button" href="{% url 'zwroty:create_return_order' %}" 
-    style="font-size: 30px; padding: 10px;">Nowy Zwrot</a>
-    <br>
-
+   
     <a class="btn btn-outline-secondary d-flex align-items-center justify-content-center" 
     role="button" href="{% url 'zwroty:wz_menagment' %}" 
-    style="font-size: 30px; padding: 10px;">WZ Menagment</a><br>
+    style="font-size: 30px; padding: 10px;">Administracja</a><br>
 
 {%endif%}
 
