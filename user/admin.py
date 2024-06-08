@@ -2,6 +2,9 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth import get_user_model
 
+from django.contrib.sessions.models import Session
+from django.contrib.admin import ModelAdmin
+
 User = get_user_model()
 
 
@@ -53,3 +56,9 @@ class UserAdmin(UserAdmin):
     )
     search_fields = ("email",)
     ordering = ("email",)
+
+class SessionAdmin(ModelAdmin):
+    def _session_data(self, obj):
+        return obj.get_decoded()
+    list_display = ['session_key', '_session_data', 'expire_date']
+admin.site.register(Session, SessionAdmin)
