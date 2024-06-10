@@ -12,7 +12,7 @@ class User(AbstractUser):
 
     role = models.CharField(max_length=10, choices=USER_ROLE_CHOICES, default="regular")
     full_name = models.CharField(max_length=100, blank=True)
-
+    force_password_change = models.BooleanField(default=False)
     class Meta:
         ordering = ["username"]
 
