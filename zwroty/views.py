@@ -7,6 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.views import View
 from datetime import datetime
+from user.mixins import CustomForcePasswordChangeMixin
 
 from .get_or_create_sku import get_or_create_sku
 from .models import (
@@ -26,7 +27,7 @@ from reportlab.graphics.barcode import code128
 def admin_panel(request):
     return render(request, "zwroty/admin_panel.html")
 
-class HomeView(LoginRequiredMixin, View):
+class HomeView(LoginRequiredMixin, CustomForcePasswordChangeMixin ,View):
     template_name = "index.html"
 
     def get(self, request, *args, **kwargs):

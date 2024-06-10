@@ -1,8 +1,9 @@
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
-from django.urls import reverse_lazy
-from django.views import generic
+from django.urls import reverse, reverse_lazy
+from django.views import View, generic
 
 from user.models import User
 
@@ -97,3 +98,21 @@ class UserUpdateView(LoginRequiredMixin, generic.UpdateView):
 class UserDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = User
     success_url = reverse_lazy("user:user-list")
+
+
+
+class CustomPasswordChangeView(LoginRequiredMixin, View):
+    template_name = "user/password_change.html"
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+    
+    def post(self, request, *args, **kwargs):
+        password = self.request.POST.get("new_pass")
+        print(password)
+        user = self.request.user
+        user.force_password_change= False
+        user.set_password(password)
+
+        user.save()
+        return redirect("zwroty:home")
