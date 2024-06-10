@@ -109,7 +109,6 @@ class CustomPasswordChangeView(LoginRequiredMixin, View):
     
     def post(self, request, *args, **kwargs):
         password = self.request.POST.get("new_pass")
-        print(password)
         user = self.request.user
         user.force_password_change= False
         user.set_password(password)
