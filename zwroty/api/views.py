@@ -21,6 +21,7 @@ class WZApiView(APIView):
                 "shop_desct": order.shop.description,
                 "shop_nr": order.shop.description,
                 "ship_doc": order.shop.ship_doc,
+                "type_of_delivery":  order.tape_of_delivery,
                 "lines": []
             }
             
@@ -35,7 +36,7 @@ class WZApiView(APIView):
                     "sku_log": "" if sku_log == None or len(str(sku_log))>8 else str(sku_log).replace("999999999999",""),
                     "sku_hand": "" if sku_hand == None or len(str(sku_hand))>8 else str(sku_hand),
                     "descript": "" if name_of_product == None else name_of_product,
-                    "qty": f"{product.quantity} {product.tape_of_delivery}"
+                    "qty": f"{product.quantity}"
                 }
                 order_data["lines"].append(product_data)
             order_list.append(order_data)
