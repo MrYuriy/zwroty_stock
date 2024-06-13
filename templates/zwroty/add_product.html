@@ -27,11 +27,6 @@
             </div>
         </div>
 
-        <select id="tape_of_delivery" name="tape_of_delivery" class="form-select" required>
-            <option  disabled selected value="" >Sposób dostawy</option>
-            <option value="op.">Paczka</option>
-            <option value="pall.">Paleta</option>
-        </select> <br>
 
         <div class="input-group mb-3" type="text">
             <span class="input-group-text" id="inputGroup-sizing-default">EAN:</span>
@@ -47,11 +42,31 @@
 </form>
 <br>
 <form method="post" action="{% url 'zwroty:add_product' %}" enctype="multipart/home">
-    <input type="hidden", name="finish", value="{{ identifier }}" , id="finish">
-    <input type="hidden", name="identifier", value="{{ identifier }}" , id="finish">
     {% csrf_token %}
-    <input class="btn btn-secondary" type="submit" value="FINISH" style="width: 100%;">
+    <input type="hidden", name="finish", value="{{ identifier }}" , id="finish">
+    <select style="display: none;", id="tape_of_delivery" name="tape_of_delivery" class="form-select"  >
+        <option  disabled selected value="" >Sposób dostawy</option>
+        <option value="op.">Paczka</option>
+        <option value="pall.">Paleta</option>
+    </select>
+    
+    <input type="hidden", name="identifier", value="{{ identifier }}" , id="finish">
+   
+    <input id="pallType" class="btn btn-secondary" type="submit" value="FINISH" style="width: 100%;">
 </form>
+<script>
+    function showPallType(){
+        var pallType = document.getElementById("tape_of_delivery");
+        pallType.required = true;
+        pallType.style.display = "block"; 
+    }
+
+    document.getElementById("pallType").addEventListener("click", function(event) {
+        showPallType();
+    });
+</script>
+
+
 {% if error_message %}
     <div class="alert alert-danger" role="alert">
         {{ error_message }}

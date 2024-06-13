@@ -113,14 +113,14 @@ class AddProduct(LoginRequiredMixin, View):
         user = self.request.user
         reas_name = request.POST.get("reason_name")
         sku_deskript = request.POST.get("sku_deskription")
-        tape_of_delivery = request.POST.get("tape_of_delivery")
+        
         ean = request.POST.get("ean")
         qty = request.POST.get("qty")
         finish = self.request.POST.get("finish")
         identifier = self.request.POST.get("identifier")
         
         if finish:
-            
+            tape_of_delivery = request.POST.get("tape_of_delivery")
             cache_data = cache.get(identifier)
 
             if cache_data is None:
@@ -131,7 +131,6 @@ class AddProduct(LoginRequiredMixin, View):
                 Product(
                     sku = line["sku"],
                     quantity = line["qty"],
-                    tape_of_delivery = line["tape_of_delivery"],
                     reasone = reas_queryset.get(name=line["reas_name"]),
                     actual_barcode = line["ean"]
                 )
@@ -140,6 +139,7 @@ class AddProduct(LoginRequiredMixin, View):
            
             order.products.add(*product_list)
             order.complite_status = True
+            order.tape_of_delivery = tape_of_delivery
             order.user = user
             order.date_recive = datetime.now()
             order.save()
@@ -155,9 +155,8 @@ class AddProduct(LoginRequiredMixin, View):
                 "reas_name": reas_name, 
                 "sku": sku,
                 "ean": ean, 
-                "tape_of_delivery": tape_of_delivery, 
                 }
-
+        # "tape_of_delivery": tape_of_delivery 
         cached_value = cache.get(identifier)
         if cached_value:
             cached_value.append(order_line)
