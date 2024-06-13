@@ -14,6 +14,8 @@
       
           if (selectedValue === "Towar niemagazynowy") {
             inputField.style.display = "block";
+            eanValue.style.display = "block";
+            eanValue.value = "";
             document.getElementById("textInput").required = true; 
           } else if (selectedValue === "Brak oznaczeń magazynowych") {
             inputField.style.display = "block";
@@ -25,6 +27,8 @@
             inputField.style.display = "none";
             document.getElementById("textInput").required = false;
             eanValue.value = "";
+            eanValue.style.display = "block";
+
           }
         }
     </script>
