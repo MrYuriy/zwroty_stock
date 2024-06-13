@@ -44,22 +44,11 @@ class ReasoneComment(models.Model):
 
 
 class Product(models.Model):
-    PALLET = "op."
-    BOX = "pall."
-
-    TAPE_OF_DELIVERY_CHOICES = [
-        (PALLET, "Pallet"),
-        (BOX, "Box"),
-    ]
+    
     sku = models.ForeignKey("SkuInformation", on_delete=models.CASCADE, null=True)
     quantity = models.IntegerField()
     actual_barcode = models.CharField(max_length=20)
-    tape_of_delivery = models.CharField(
-        max_length=5,
-        choices=TAPE_OF_DELIVERY_CHOICES,
-        default=BOX,
-        verbose_name="tape_of_delivery",
-    )
+    
     reasone = models.ForeignKey(ReasoneComment, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
@@ -69,6 +58,19 @@ class Product(models.Model):
 
 
 class ReturnOrder(models.Model):
+    PALLET = "pall."
+    BOX = "op."
+
+    TAPE_OF_DELIVERY_CHOICES = [
+        (PALLET, "Paleta"),
+        (BOX, "Paczka"),
+    ]
+    tape_of_delivery = models.CharField(
+        max_length=5,
+        choices=TAPE_OF_DELIVERY_CHOICES,
+        default=BOX,
+        verbose_name="tape_of_delivery",
+    )
     nr_order = models.CharField(max_length=20)#bon wyjszcia
     position_nr = models.IntegerField()#NR WZ
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE)

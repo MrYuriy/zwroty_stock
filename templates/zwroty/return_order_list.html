@@ -23,6 +23,8 @@
                             <th>Numer wuzetki</th>  
                             <th>Sklep</th>
                             <th>Status</th>
+                            <th>Typ nośnika</th>
+                            <th>Ostatnia aktualizacja przez</th>
                         </tr> 
                         <tbody>
                             {% for order in order_list %}
@@ -42,7 +44,10 @@
                                     {% else %}
                                         Nie Zrobione
                                     {% endif %}
-                                </td>  
+                                </td>
+                                <td>{{ order.tape_of_delivery }}</td>  
+                                <td>{{ order.user }}</td>  
+
                             </tr>
                             {% endfor %}
                         </tbody>

@@ -234,7 +234,7 @@ class OrderStorageView(LoginRequiredMixin, View):
         if date_recive:
             date_recive = datetime.strptime(date_recive, "%Y-%m-%d")
             queryset = queryset.filter(date_recive__date=date_recive)
-        
+
         context = {"order_list": queryset.order_by("-date_recive")}
         return render(request, "zwroty/return_order_list.html", context)
 
