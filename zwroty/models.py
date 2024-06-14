@@ -58,15 +58,15 @@ class Product(models.Model):
 
 
 class ReturnOrder(models.Model):
-    PALLET = "pall."
-    BOX = "op."
+    PALLET = "paleta"
+    BOX = "paczka"
 
     TAPE_OF_DELIVERY_CHOICES = [
         (PALLET, "Paleta"),
         (BOX, "Paczka"),
     ]
     tape_of_delivery = models.CharField(
-        max_length=5,
+        max_length=6,
         choices=TAPE_OF_DELIVERY_CHOICES,
         default=BOX,
         verbose_name="tape_of_delivery",
