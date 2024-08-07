@@ -9,7 +9,8 @@ from .models import (
 
 class ReturnOrderAdmin(admin.ModelAdmin):
     list_display = (
-        "identifier", 
+        "identifier",
+        "nr_order", 
         "date_recive", 
         "complite_status", 
         "generate_xls_status",
