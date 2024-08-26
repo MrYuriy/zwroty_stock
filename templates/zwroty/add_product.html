@@ -65,6 +65,20 @@
         showPallType();
     });
 </script>
+<script>
+    document.getElementById("qty").addEventListener("input", function(event) {
+        var qtyInput = document.getElementById("qty");
+        
+        // Check if the user entered a newline character
+        if (qtyInput.value.includes('\n')) {
+            // Option 1: Clear the input
+            qtyInput.value = '';
+            
+            // Option 2: Hide the input field (uncomment the line below to use this option)
+            // qtyInput.parentElement.style.display = 'none';
+        }
+    });
+</script>
 
 
 {% if error_message %}
