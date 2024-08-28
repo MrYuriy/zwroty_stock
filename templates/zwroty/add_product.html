@@ -29,13 +29,13 @@
 
 
         <div class="input-group mb-3" type="text">
-            <span class="input-group-text" id="inputGroup-sizing-default">EAN:</span>
-            <input id="ean" name="ean" type="text" class="form-control" required><br>
+            <span class="input-group-text" id="inputGroup-sizing-default">QTY:</span>
+            <input id="qty" name="qty" type="number" class="form-control" required><br>
         </div>
 
         <div class="input-group mb-3" type="text">
-            <span class="input-group-text" id="inputGroup-sizing-default">QTY:</span>
-            <input id="qty" name="qty" type="number" class="form-control" required><br>
+            <span class="input-group-text" id="inputGroup-sizing-default">EAN:</span>
+            <input id="ean" name="ean" type="text" class="form-control" required><br>
         </div>
         
         <input class="btn btn-secondary" type="submit" value="CONTUNUJ" style="width: 100%;">    
@@ -69,14 +69,9 @@
     document.getElementById("qty").addEventListener("input", function(event) {
         var qtyInput = document.getElementById("qty");
         
-        // Check if the user entered a newline character
-        if (qtyInput.value.includes('\n')) {
-            // Option 1: Clear the input
-            qtyInput.value = '';
-            
-            // Option 2: Hide the input field (uncomment the line below to use this option)
-            // qtyInput.parentElement.style.display = 'none';
-        }
+        // Видаляємо всі знаки переносу на новий рядок
+        qtyInput.value = qtyInput.value.replace(/[\r\n]+/g, '');
+        console.log("The current value of the EAN input is:", qtyInput);
     });
 </script>
 
