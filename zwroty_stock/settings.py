@@ -12,8 +12,11 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+from urllib.parse import urlparse
 from dotenv import load_dotenv
 import dj_database_url
+from os import getenv
+from dotenv import load_dotenv
 
 
 load_dotenv()
@@ -31,7 +34,7 @@ SECRET_KEY = os.environ["SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", "zwroty-stock.onrender.com"]
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -83,17 +86,28 @@ TEMPLATES = [
 WSGI_APPLICATION = "zwroty_stock.wsgi.application"
 
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
+
+# db_from_env = dj_database_url.config(conn_max_age=500)
+# db_from_env["OPTIONS"] = {"sslmode": "require"}
+# DATABASES["default"].update(db_from_env)
+tmpPostgres = urlparse(os.getenv("DATABASE_URL"))
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': tmpPostgres.path.replace('/', ''),
+        'USER': tmpPostgres.username,
+        'PASSWORD': tmpPostgres.password,
+        'HOST': tmpPostgres.hostname,
+        'PORT': 5432,
     }
 }
-
-db_from_env = dj_database_url.config(conn_max_age=500)
-db_from_env["OPTIONS"] = {"sslmode": "require"}
-DATABASES["default"].update(db_from_env)
-
 
 CACHES = {
     "default": {
